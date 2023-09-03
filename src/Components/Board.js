@@ -1,10 +1,11 @@
 import React from "react";
 import { Square } from "./Square";
-import { checkWinner as checkWinner } from "../misc";
+import { checkWinner } from "../misc";
 
 export function Board({ xTurn, squares, onPlay, currentMove, boardSize }) {
   function handleClick(i) {
-    if (squares[i] || checkWinner(squares)) {
+    debugger;
+    if (squares[i] || checkWinner(squares)[0].length > 0) {
       return;
     }
 
@@ -18,41 +19,46 @@ export function Board({ xTurn, squares, onPlay, currentMove, boardSize }) {
   }
 
   //Todo winner with 5x5
-  const winner = checkWinner(squares);
+  const winnerAndLines = checkWinner(squares);
   let status;
-  if (winner) {
-    status = `${winner[0]} is won!`;
+  if (winnerAndLines[0].length > 0) {
+    status = `${winnerAndLines[0]} is won!`;
   } else {
     status = "Now is " + (currentMove + 1) + " turn of " + (xTurn ? "X" : "O");
   }
 
-  const board = [];
-  for (let x = 0; x < boardSize[0]; x++) {
-    const newSquares = [];
+  function boardInit() {
+    const board = [];
 
-    for (let y = 0; y < boardSize[1]; y++) {
-      let squareInd = x * boardSize[0] + y;
+    for (let x = 0; x < boardSize[0]; x++) {
+      const newSquares = [];
 
-      newSquares.push(
-        <Square
-          key={y}
-          value={squares[squareInd]}
-          onSquareClick={() => handleClick(squareInd)}
-        />
+      for (let y = 0; y < boardSize[1]; y++) {
+        let squareInd = x * boardSize[0] + y;
+
+        newSquares.push(
+          <Square
+            key={y}
+            value={squares[squareInd]}
+            onSquareClick={() => handleClick(squareInd)}
+            winSquare={winnerAndLines[1].includes(squareInd)}
+          />
+        );
+      }
+
+      board.push(
+        <div className='board-row' key={x}>
+          {newSquares}
+        </div>
       );
     }
-
-    board.push(
-      <div className='board-row' key={x}>
-        {newSquares}
-      </div>
-    );
+    return board;
   }
 
   return (
     <div>
       <div className='status'>{status}</div>
-      {board}
+      {boardInit()}
     </div>
   );
 }

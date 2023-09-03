@@ -1,8 +1,10 @@
 import React from "react";
 
-export function Square({ value, onSquareClick }) {
+export function Square({ value, onSquareClick, winSquare }) {
+  const classname = winSquare ? "winSquare" : "square";
+
   return (
-    <button className='square' onClick={onSquareClick}>
+    <button className={classname} onClick={onSquareClick}>
       {value}
     </button>
   );

@@ -34,8 +34,19 @@ body {
   text-align: center;
 }
 
-.square.win{
+.winSquare{
   background: #af4e4e;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  width: 40px;
+  height: 40px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
 }
 
 

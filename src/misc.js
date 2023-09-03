@@ -14,8 +14,8 @@ export function checkWinner(squares) {
     const [a, b, c] = winlines[i];
     if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
       console.log(squares[a] + " is won!");
-      return [squares[a], a, b, c];
+      return [squares[a], [a, b, c]];
     }
   }
-  return null;
+  return [[], []];
 }
