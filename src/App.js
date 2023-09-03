@@ -7,6 +7,7 @@ export default function Game() {
   const [currentMove, setCurrentMove] = useState(0);
   const xTurn = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
+  const boardSize = [3, 3];
 
   function handlePlay(nextTurnSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextTurnSquares];
@@ -35,7 +36,13 @@ export default function Game() {
   return (
     <div className='game'>
       <div className='game-board'>
-        <Board xTurn={xTurn} squares={currentSquares} onPlay={handlePlay} />
+        <Board
+          xTurn={xTurn}
+          squares={currentSquares}
+          onPlay={handlePlay}
+          currentMove={currentMove}
+          boardSize={boardSize}
+        />
       </div>
       <div className='game-info'>
         <ol>{moves}</ol>
