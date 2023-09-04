@@ -2,9 +2,16 @@ import React from "react";
 import { Square } from "./Square";
 import { checkWinner } from "../misc";
 
-export function Board({ xTurn, squares, onPlay, currentMove, boardSize }) {
+export function Board({
+  xTurn,
+  squares,
+  onPlay,
+  currentMove,
+  boardSize,
+  setWinLine,
+  winLine,
+}) {
   function handleClick(i) {
-    debugger;
     if (squares[i] || checkWinner(squares)[0].length > 0) {
       return;
     }
