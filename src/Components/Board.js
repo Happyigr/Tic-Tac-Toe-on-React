@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import React, { useState } from "react";
 import { Square } from "./Square";
 import { checkWinner } from "../misc";
 
@@ -8,11 +9,13 @@ export function Board({
   onPlay,
   currentMove,
   boardSize,
-  setWinLine,
-  winLine,
+  winLineLength,
 }) {
+  const [endGame, setEndGame] = useState(false);
+  const [lastClicked, setLastClicked] = useState(0);
+
   function handleClick(i) {
-    if (squares[i] || checkWinner(squares)[0].length > 0) {
+    if (squares[i] || endGame) {
       return;
     }
 
@@ -23,12 +26,19 @@ export function Board({
       nextTurnSquares[i] = "O";
     }
     onPlay(nextTurnSquares);
+    setLastClicked(i);
   }
 
   //Todo winner with 5x5
-  const winnerAndLines = checkWinner(squares);
+  // const winnerAndLines = [[], []];
+  const winnerAndLines = checkWinner(
+    squares,
+    lastClicked,
+    winLineLength,
+    boardSize[0]
+  );
   let status;
-  if (winnerAndLines[0].length > 0) {
+  if (winnerAndLines[0]) {
     status = `${winnerAndLines[0]} is won!`;
   } else {
     status = "Now is " + (currentMove + 1) + " turn of " + (xTurn ? "X" : "O");
@@ -47,6 +57,7 @@ export function Board({
           <Square
             key={y}
             value={squares[squareInd]}
+            // value={squareInd}
             onSquareClick={() => handleClick(squareInd)}
             winSquare={winnerAndLines[1].includes(squareInd)}
           />

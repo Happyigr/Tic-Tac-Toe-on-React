@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import { Board } from "./Components/Board";
+import { PreviewBoard } from "./Components/Preview/PreviewBoard";
 
 export default function Game() {
+  const boardSize = [5, 5];
+  const winLineLength = 3;
+
   // Array of Arrays(boards) of every turn
-  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [history, setHistory] = useState([
+    Array(boardSize[0] * boardSize[1]).fill(null),
+  ]);
   const [currentMove, setCurrentMove] = useState(0);
   const [descendingSort, setDescendingSort] = useState(false);
-  const [winLine, setWinLine] = useState(Array(3));
+
   const xTurn = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
-  const boardSize = [3, 3];
 
   function handlePlay(nextTurnSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextTurnSquares];
@@ -19,38 +24,6 @@ export default function Game() {
 
   function jumpTo(turnNum) {
     setCurrentMove(turnNum);
-  }
-
-  function PreviewSquare({ value }) {
-    // const classname = winSquare ? "winSquare" : "square";
-
-    return <button className='square'>{value}</button>;
-  }
-
-  function previewBoard(board, boardSize) {
-    const previewBoard = [];
-
-    for (let x = 0; x < boardSize[0]; x++) {
-      const newRow = [];
-
-      for (let y = 0; y < boardSize[1]; y++) {
-        let squareInd = x * boardSize[0] + y;
-
-        newRow.push(
-          <PreviewSquare
-            key={squareInd}
-            value={board[squareInd]}
-            // winSquare={winLine[1].includes(squareInd)}
-          />
-        );
-      }
-      previewBoard.push(
-        <div className='board-row' key={x}>
-          {newRow}
-        </div>
-      );
-    }
-    return previewBoard;
   }
 
   const moves = history.map((squares, turnNum) => {
@@ -66,7 +39,7 @@ export default function Game() {
     return (
       <li key={turnNum}>
         <button onClick={() => jumpTo(turnNum)}>{description}</button>
-        {preview ? previewBoard(squares, boardSize) : null}
+        {preview ? PreviewBoard(squares, boardSize) : null}
       </li>
     );
   });
@@ -80,8 +53,7 @@ export default function Game() {
           onPlay={handlePlay}
           currentMove={currentMove}
           boardSize={boardSize}
-          setWinLine={setWinLine}
-          winLine={winLine}
+          winLineLength={winLineLength}
         />
       </div>
       <div className='game-info'>
